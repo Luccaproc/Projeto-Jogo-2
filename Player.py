@@ -16,7 +16,7 @@ def MovimentoNave(nave, tamanho_tela):
     
     keys = pygame.key.get_pressed() 
     if keys[pygame.K_LEFT]: # We can check if a key is pressed like this
-        if(nave[0] >= 0):
+        if(nave[0] >= 0 + nave[2]):
             nave[0] = nave[0] - velocidade
         else:
             nave[0] = nave[0]
@@ -26,7 +26,7 @@ def MovimentoNave(nave, tamanho_tela):
         else: 
             nave[0] = tamanho_tela[0] - nave[2]
     if keys[pygame.K_UP]:
-        if nave[1] >= 0:
+        if nave[1] >= 0 + nave[3]:
             nave[1] = nave[1] - velocidade
         else:
             nave[1] = nave[1]

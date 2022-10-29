@@ -28,6 +28,7 @@ def SpawnInimigo(tamanho_tela):
 def MovimentoInimigo(inimigo):
     global THETA
     seno = math.sin(THETA)
+
     inimigo[0] += inimigo[6][0] * inimigo[4]
     inimigo[1] += inimigo[6][1] * inimigo[4] 
     inimigo[1] += seno * 5
@@ -35,6 +36,9 @@ def MovimentoInimigo(inimigo):
 def setTheta():
     global THETA 
     THETA += 0.1
+
+def seno(angulo):
+    angulo % 360
 
 def FogoInimigo(inimigos):
     for n in range(len(inimigos)): 
