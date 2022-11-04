@@ -7,6 +7,7 @@ from Tiro import *
 from Inimigo import *
 from Particulas import *
 from Colisoes import *
+from Chefe import *
 
 pygame.init()
 
@@ -44,12 +45,16 @@ def jogo():
         RemoveTiros(nave[5],tamanho_tela)
 
         SpawnInimigo(tamanho_tela)
+        SpawnChefe(tamanho_tela)
+
+        FogoBoss(chefes)
         FogoInimigo(inimigos)
 
         DesenhaParticulas()
         
 
         setTheta()
+        setTheta_BOSS()
         # MovimentoInimigo(inimigos)
 
         for nav in naves:
@@ -64,12 +69,27 @@ def jogo():
             MovimentoInimigo(inimigo)
             pygame.draw.rect(tela,inimigo[5],(inimigo[0],inimigo[1],inimigo[2],inimigo[3]))
 
+        #desenhando chefes na tela
+        for chefe in chefes:
+            MovimentoBoss(chefe, tamanho_tela)
+            pygame.draw.rect(tela,chefe[5],(chefe[0],chefe[1],chefe[2],chefe[3]))
+
         #desenhando tiros de inimigos na tela
         for inimigo in inimigos:
             RemoveTiros(inimigo[9],tamanho_tela)
             RemoveElementosColisao(nave[5],inimigo,True,True)
             RemoveElementosColisao(inimigo[9],nave,True,True)
             for tiro in inimigo[9]:
+                tiro[0] += (tiro[5][0] * 10)
+                tiro[1] += (tiro[5][1] * 10)
+                pygame.draw.rect(tela,tiro[4],(tiro[0],tiro[1],tiro[2],tiro[3]))
+
+        #desenhando tiros de chefes na tela
+        for chefe in chefes:
+            RemoveTiros(chefe[9],tamanho_tela)
+            RemoveElementosColisao(nave[5],chefe,True,True)
+            RemoveElementosColisao(chefe[9],nave,True,True)
+            for tiro in chefe[9]:
                 tiro[0] += (tiro[5][0] * 10)
                 tiro[1] += (tiro[5][1] * 10)
                 pygame.draw.rect(tela,tiro[4],(tiro[0],tiro[1],tiro[2],tiro[3]))

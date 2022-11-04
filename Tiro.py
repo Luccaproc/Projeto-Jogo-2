@@ -1,20 +1,37 @@
 
+import math
+
+
 cooldown_tiro = 0
 cooldown_tiro_inimigo = 0
 
-def AdicionaTiroNave(xpos,ypos,largura,altura,cor,direcao,cooldown,tiros_list):
+def AdicionaTiroNave(xpos,ypos,largura,altura,cor,direcao,cooldown,tiros_list,qtd_poder):
     global cooldown_tiro
     global cooldown_tiro_inimigo
-    # print(cooldown_tiro)
+    
+    anguloStep = 90//(qtd_poder+1)
+
+    anguloAtual = 45 - anguloStep
+
     cooldown_maximo = cooldown
     if cooldown_tiro > cooldown_maximo:
-        tiroX = xpos
-        tiroY = ypos
-        tiro_largura = largura
-        tiro_altura = altura
-        tiro_cor = cor
-        tiro_direcao = direcao
-        tiros_list.append([tiroX,tiroY,tiro_largura,tiro_altura,tiro_cor,tiro_direcao])
+        for bullet in range(qtd_poder):
+            print(anguloAtual)
+            sen = math.sin((anguloAtual * math.pi)/180)*1
+            cos = math.cos((anguloAtual * math.pi)/180)*1
+
+            tiroX = xpos
+            tiroY = ypos
+           
+            tiro_largura = largura
+            tiro_altura = altura
+            tiro_cor = cor
+            tiro_direcao = [direcao[0] + cos,direcao[1] + sen]
+
+            tiros_list.append([tiroX,tiroY,tiro_largura,tiro_altura,tiro_cor,tiro_direcao])
+
+            anguloAtual -= math.ceil(anguloStep)
+
         cooldown_tiro = 0
     else:
         cooldown_tiro += 1
@@ -28,7 +45,6 @@ def RemoveTiros(list_tiros,tamanho_tela):
 
 def AdicionaTiroInimigo(xpos,ypos,largura,altura,cor,direcao,cooldown,cool_down_start,tiros_list):
 
-   
     tiroX = xpos
     tiroY = ypos
     tiro_largura = largura
@@ -37,4 +53,13 @@ def AdicionaTiroInimigo(xpos,ypos,largura,altura,cor,direcao,cooldown,cool_down_
     tiro_direcao = direcao
     tiros_list.append([tiroX,tiroY,tiro_largura,tiro_altura,tiro_cor,tiro_direcao])
         
+def AdicionaTiroBoss(xpos,ypos,largura,altura,cor,direcao,cooldown,cool_down_start,tiros_list):
+
+    tiroX = xpos
+    tiroY = ypos
+    tiro_largura = largura
+    tiro_altura = altura
+    tiro_cor = cor
+    tiro_direcao = direcao
+    tiros_list.append([tiroX,tiroY,tiro_largura,tiro_altura,tiro_cor,tiro_direcao])
  

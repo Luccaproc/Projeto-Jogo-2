@@ -39,5 +39,5 @@ def MovimentoNave(nave, tamanho_tela):
 def TiroNave(nave,tempo):
     keys = pygame.key.get_pressed() 
     if keys[pygame.K_SPACE]:
-        AdicionaTiroNave(nave[0],nave[1] + (nave[3]/2),5,5,(255,255,255),[1,0],10,nave[5])
+        AdicionaTiroNave(nave[0],nave[1] + (nave[3]/2),5,5,(255,255,255),[1,0],5,nave[5],4)
 

@@ -16,11 +16,11 @@ def RemoveElementosColisao(lista,elemento,removerA,removerB):
         if d <= el_lista[2]/2 + elemento[2]/2:
             AdicionaParticulas(el_lista[0],el_lista[1])
             if removerA :
-                el_lista[0] = -30
-                el_lista[1] = -30
+                el_lista[0] = -800
+                el_lista[1] = -800
             if removerB:
-                elemento[0] = -30
-                elemento[1] = -30
+                elemento[0] = -800
+                elemento[1] = -800
 
 def RemoveElementoColisao(elementoA,elementoB,removerA,removerB):
     d = ( (elementoA[0] - elementoB[0])**2 + (elementoA[1] - elementoB[1])**2 )**0.5
