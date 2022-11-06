@@ -16,7 +16,7 @@ def AdicionaTiroNave(xpos,ypos,largura,altura,cor,direcao,cooldown,tiros_list,qt
     cooldown_maximo = cooldown
     if cooldown_tiro > cooldown_maximo:
         for bullet in range(qtd_poder):
-            print(anguloAtual)
+
             sen = math.sin((anguloAtual * math.pi)/180)*1
             cos = math.cos((anguloAtual * math.pi)/180)*1
 
