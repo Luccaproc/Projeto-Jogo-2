@@ -35,27 +35,30 @@ for index in range(qtd_cenarios):
     linha = index//4
     
     corte = (col*1024,linha*512,1024,512)
-    img = backgroundImg2.subsurface(corte)
+    img = backgroundImg2.subsurface(corte).convert_alpha()
     objImg = [img,0,0]
     cenarios.append(objImg)
 
 cenario_width = cenarios[0][0].get_width()
 
-
-def draw_bg(img,speed):
+def draw_cenario(img,speed):
     tiles = math.ceil(tamanho_tela[0]/cenario_width)+math.ceil(speed)
     scrollInfinito(img,speed, tiles)
     scrollReset(img,speed)
 
 def scrollInfinito(img,speed,tiles):
-    for i in range(0, tiles):
-        tela.blit(img[0],((i * cenario_width )+ img[1],0))
-            # tela.blit(img[0],((i*cenario_width)-(img[1]*speed),0))
+    if speed > 0 :
+        for i in range(0, tiles):
+            tela.blit(img[0],((i * cenario_width )+ img[1],0))
+                # tela.blit(img[0],((i*cenario_width)-(img[1]*speed),0))
+    else:
+        tela.blit(img[0],(0,0))
 
 def scrollReset(img,speed):
-    img[1] -= 5 * speed 
-    if abs(img[1]) > cenario_width :
-        img[1] = 0 
+    if speed > 0:
+        img[1] -= 5 * speed 
+        if abs(img[1]) > cenario_width :
+            img[1] = 0 
 
 def jogo():
     jogando = True
@@ -72,20 +75,20 @@ def jogo():
 
         tela.fill((70,70,70))
 
-        draw_bg(cenarios[0],0)
-        draw_bg(cenarios[1],0)
-        draw_bg(cenarios[2],0)
-        draw_bg(cenarios[3],0.3)
-        draw_bg(cenarios[4],0)
-        draw_bg(cenarios[5],0)
-        draw_bg(cenarios[6],0)
-        draw_bg(cenarios[7],0)
-        draw_bg(cenarios[8],0)
-        draw_bg(cenarios[9],0.5)
-        draw_bg(cenarios[10],0.7)
-        # draw_bg(cenarios[11],0.8)
-        draw_bg(cenarios[13],1)
-        # scrollInfinito(cenarios[13])
+        draw_cenario(cenarios[0],0)
+        draw_cenario(cenarios[1],0)
+        draw_cenario(cenarios[2],0)
+        draw_cenario(cenarios[3],0.1)
+        draw_cenario(cenarios[4],0)
+        draw_cenario(cenarios[5],0)
+        draw_cenario(cenarios[6],0)
+        draw_cenario(cenarios[7],0)
+        # draw_cenario(cenarios[8],0)
+        # draw_cenario(cenarios[9],0.3)
+        # draw_cenario(cenarios[10],0.7)
+        # draw_cenario(cenarios[11],0.8)
+        draw_cenario(cenarios[12],0)
+        draw_cenario(cenarios[13],1)
 
         RemoveElementosTamanhoTela(inimigos,tamanho_tela)
         MovimentoNave(nave,tamanho_tela)
