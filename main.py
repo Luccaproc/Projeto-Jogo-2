@@ -9,6 +9,7 @@ from Inimigo import *
 from Particulas import *
 from Colisoes import *
 from Chefe import *
+from Buff import *
 # from Parallax import *
 
 pygame.init()
@@ -42,7 +43,7 @@ for index in range(qtd_cenarios):
 cenario_width = cenarios[0][0].get_width()
 
 def draw_cenario(img,speed):
-    tiles = math.ceil(tamanho_tela[0]/cenario_width)+math.ceil(speed)
+    tiles = math.ceil(tamanho_tela[0]/cenario_width)+1
     scrollInfinito(img,speed, tiles)
     scrollReset(img,speed)
 
@@ -64,7 +65,7 @@ def jogo():
     jogando = True
     pontos = 0
     
-    AdicionaNave(tamanho_tela[0]/2,tamanho_tela[1]/2,50,25,(255,255,255),[])
+    AdicionaNave(tamanho_tela[0]/2,tamanho_tela[1]/2,50,25,(255,255,255),[],1)
     nave = naves[0]
     pygame.mouse.set_visible(0)
     while jogando:
@@ -98,6 +99,7 @@ def jogo():
 
         SpawnInimigo(tamanho_tela)
         SpawnChefe(tamanho_tela)
+        SpawnBuff(tamanho_tela)
 
         FogoBoss(chefes)
         FogoInimigo(inimigos)
@@ -115,6 +117,8 @@ def jogo():
         #colisão de inimigos com a nave
         RemoveElementosColisao(inimigos,nave,True,False)
        
+        #colisão de nave com buffs
+        buffColisao(buffs,nave)
 
         #desenhando inimigos na tela
         for inimigo in inimigos:
@@ -153,6 +157,10 @@ def jogo():
             tiro[1] += (tiro[5][1] * 10)
             pygame.draw.rect(tela,tiro[4],(tiro[0],tiro[1],tiro[2],tiro[3]))
                
+        for buff in buffs:
+            MovimentoBuff(buff)
+            pygame.draw.rect(tela,buff[5],(buff[0],buff[1],buff[2],buff[3]))
+
         pygame.display.update()
         
         RemoveElementosTamanhoTela(naves,tamanho_tela)
