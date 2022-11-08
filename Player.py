@@ -1,7 +1,9 @@
+from random import randint
 import pygame
 from Tiro import *
 
 naves = []
+particulas_nave = []
 
 def AdicionaNave(xpos,ypos,largura,altura,cor,tiros,power):
     naveX = xpos + 3
@@ -41,3 +43,16 @@ def TiroNave(nave,tempo):
     if keys[pygame.K_SPACE]:
         AdicionaTiroNave(nave[0],nave[1] + (nave[3]/2),5,5,(255,255,255),[1,0],5,nave[5],nave[6])
 
+def drawParticlesPlayer(nave,vel):
+    
+    particulas_nave.append([[nave[0],nave[1]+(nave[3]/2)],[randint(0,20)/10-1,-2],randint(4,15)])
+    for particle in particulas_nave:
+        particle[0][0] += particle[1][1] * vel
+        particle[0][1] += particle[1][0]
+        particle[2] -= 0.2
+        particle[1][1] -= 0.3
+        if(int(particle[2]*0.3) > 0):
+                    # pygame.draw.circle(game,(255//(int(particle[2]*0.7)),255//(int(particle[2]*2)),255//(int(particle[2]*2))),[int(particle[0][0]),int(particle[0][1])],int(particle[2]))
+            pygame.draw.rect(pygame.display.get_surface(),(255//(int(particle[2]*0.3)),255//(int(particle[2]*0.6)),255//(int(particle[2]*2))),(int(particle[0][0]),int(particle[0][1]),int(particle[2]),int(particle[2])))
+        if(particle[2] <= 0):
+            particulas_nave.remove(particle)

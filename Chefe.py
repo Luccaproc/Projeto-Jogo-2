@@ -15,7 +15,7 @@ def AdicionaBoss(xpos,ypos,largura,altura,velocidade,cor,direcao,cooldown_max,co
     global chefes
     chefes.append([xpos,ypos,largura,altura,velocidade,cor,direcao,cooldown_max,cooldown_start,tiros,qtd_poder,metade,fogo])
 
-def SpawnChefe(tamanho_tela):
+def SpawnChefe(tamanho_tela,velocidade):
 
     tempo_atual = pygame.time.get_ticks()
     global startTime
@@ -25,12 +25,12 @@ def SpawnChefe(tamanho_tela):
     xpos = tamanho_tela[0]
     ypos = (tamanho_tela[1]//2)-100
     
-    if segundos > 20:
-        AdicionaBoss(xpos,ypos,100,100,2,(255,255,255),[-1,0],5,0,[],10,False,False)
+    if segundos > 30:
+        AdicionaBoss(xpos,ypos,100,100,velocidade,(255,255,255),[-1,0],5,0,[],10,False,False)
         startTime = pygame.time.get_ticks()
 
 
-def MovimentoBoss(chefe,tamanho_tela):
+def MovimentoBoss(chefe,tamanho_tela,vel):
 
     global THETA_BOSS
 
@@ -56,13 +56,11 @@ def MovimentoBoss(chefe,tamanho_tela):
         chefe[1] += seno * 5
         chefe[0] += coseno * 5
 
-    
-
 def setTheta_BOSS():
     global THETA_BOSS 
     THETA_BOSS += 0.1
 
-def FogoBoss(chefes):
+def FogoBoss(chefes,sprite):
     for n in range(len(chefes)): 
         chefe = chefes[n]
 
@@ -86,7 +84,7 @@ def FogoBoss(chefes):
 
                     # tiros_list.append([tiroX,tiroY,tiro_largura,tiro_altura,tiro_cor,tiro_direcao])
 
-                    AdicionaTiroInimigo(tiroX,tiroY,tiro_largura,tiro_altura,tiro_cor,tiro_direcao,chefe[7],chefe[8],chefe[9])
+                    AdicionaTiroInimigo(tiroX,tiroY,tiro_largura,tiro_altura,tiro_cor,tiro_direcao,chefe[7],chefe[8],chefe[9],sprite,0)
                     anguloAtual -= math.ceil(anguloStep)
                 chefe[12] = False
             else :

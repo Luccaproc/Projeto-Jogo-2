@@ -1,7 +1,6 @@
 
 import math
 
-
 cooldown_tiro = 0
 cooldown_tiro_inimigo = 0
 
@@ -17,6 +16,7 @@ def AdicionaTiroNave(xpos,ypos,largura,altura,cor,direcao,cooldown,tiros_list,qt
     if cooldown_tiro > cooldown_maximo:
         for bullet in range(qtd_poder):
 
+            #transformando graus em radianos
             sen = math.sin((anguloAtual * math.pi)/180)*1
             cos = math.cos((anguloAtual * math.pi)/180)*1
 
@@ -43,7 +43,7 @@ def RemoveTiros(list_tiros,tamanho_tela):
         elif tiro[1] >= tamanho_tela[1] or tiro[1] <= 0:
             list_tiros.remove(tiro)
 
-def AdicionaTiroInimigo(xpos,ypos,largura,altura,cor,direcao,cooldown,cool_down_start,tiros_list):
+def AdicionaTiroInimigo(xpos,ypos,largura,altura,cor,direcao,cooldown,cool_down_start,tiros_list,sprite,sprite_index):
 
     tiroX = xpos
     tiroY = ypos
@@ -51,7 +51,7 @@ def AdicionaTiroInimigo(xpos,ypos,largura,altura,cor,direcao,cooldown,cool_down_
     tiro_altura = altura
     tiro_cor = cor
     tiro_direcao = direcao
-    tiros_list.append([tiroX,tiroY,tiro_largura,tiro_altura,tiro_cor,tiro_direcao])
+    tiros_list.append([tiroX,tiroY,tiro_largura,tiro_altura,tiro_cor,tiro_direcao,sprite,sprite_index])
         
 def AdicionaTiroBoss(xpos,ypos,largura,altura,cor,direcao,cooldown,cool_down_start,tiros_list):
 
