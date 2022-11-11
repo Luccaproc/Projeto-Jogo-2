@@ -9,10 +9,10 @@ startTime = pygame.time.get_ticks()
 
 THETA = 0
 
-def AdicionaInimigo(xpos,ypos,largura,altura,velocidade,sprite,sprite_index,direcao,cooldown_max,cooldown_start,tiros):
+def AdicionaInimigo(xpos,ypos,largura,altura,velocidade,sprite,sprite_index,direcao,cooldown_max,cooldown_start,tiros,vida,vivo):
     global inimigos
     theta = 0
-    inimigos.append([xpos,ypos,largura,altura,velocidade,sprite,sprite_index,direcao,cooldown_max,cooldown_start,tiros,theta])
+    inimigos.append([xpos,ypos,largura,altura,velocidade,sprite,sprite_index,direcao,cooldown_max,cooldown_start,tiros,theta,vida,vivo])
 
 def SpawnInimigo(tamanho_tela,sprites,velocidade):
     rand = randint(1,9)
@@ -24,18 +24,20 @@ def SpawnInimigo(tamanho_tela,sprites,velocidade):
     ypos = randint(100,tamanho_tela[1]-100)
     
     if segundos >  1000 * (10/rand):
-        AdicionaInimigo(xpos,ypos,50,25,velocidade,sprites,0,[-1,0],70,0,[])
+        vida_adicional = velocidade * 10
+        AdicionaInimigo(xpos,ypos,50,25,velocidade,sprites,0,[-1,0],100,0,[],50+vida_adicional,True)
         startTime = pygame.time.get_ticks()
 
 def MovimentoInimigo(inimigo,vel):
     global THETA
-    seno = math.sin(inimigo[11])
+    if inimigo[12]:
+        seno = math.sin(inimigo[11])
 
-    inimigo[0] += inimigo[7][0] * inimigo[4] 
-    inimigo[1] += inimigo[7][1] * inimigo[4] 
-    inimigo[1] += seno * 5
+        inimigo[0] += inimigo[7][0] * inimigo[4] 
+        inimigo[1] += inimigo[7][1] * inimigo[4] 
+        inimigo[1] += seno * 5
 
-    inimigo[11] += 0.1
+        inimigo[11] += 0.1
 
 def setTheta():
     global THETA 
@@ -47,12 +49,12 @@ def seno(angulo):
 def FogoInimigo(inimigos,sprite):
     for n in range(len(inimigos)): 
         inimigo = inimigos[n]
-
-        cooldown_maximo_inimigo = inimigo[8]
-
-        if inimigo[9] > cooldown_maximo_inimigo:
-            AdicionaTiroInimigo(inimigo[0]-(inimigo[2]//2),inimigo[1]+(inimigo[3]//2)+5,5,5,(255,0,0),[-1,0],inimigo[8],inimigo[9],inimigo[10],sprite,0)
-            inimigo[9] = 0
-        else :
-            inimigo[9] += 1
-        
+        if inimigo[12]:
+            cooldown_maximo_inimigo = inimigo[8]
+            
+            if inimigo[9] > cooldown_maximo_inimigo:
+                AdicionaTiroInimigo(inimigo[0]-(inimigo[2]//2),inimigo[1]+(inimigo[3]//2)+5,5,5,(255,200,30),[-1,0],inimigo[8],inimigo[9],inimigo[10],sprite,0)
+                inimigo[9] = 0
+            else :
+                inimigo[9] += 1
+            

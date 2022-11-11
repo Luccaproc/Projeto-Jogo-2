@@ -5,13 +5,14 @@ from Tiro import *
 naves = []
 particulas_nave = []
 
-def AdicionaNave(xpos,ypos,largura,altura,cor,tiros,power):
+def AdicionaNave(xpos,ypos,largura,altura,cor,tiros,power,vida_atual,vida_maxima):
+    vivo = True
     naveX = xpos + 3
     naveY = ypos + 3
     nave_largura = largura
     nave_altura = altura
     nave_cor = cor
-    naves.append([naveX,naveY,nave_largura,nave_altura,nave_cor,tiros,power])
+    naves.append([naveX,naveY,nave_largura,nave_altura,nave_cor,tiros,power,vida_atual,vida_maxima,vivo])
 
 def MovimentoNave(nave, tamanho_tela):
     velocidade = 5
