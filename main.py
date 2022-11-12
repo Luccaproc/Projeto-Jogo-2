@@ -79,11 +79,28 @@ def scrollReset(img,speed):
         if abs(img[1]) > cenario_width :
             img[1] = 0 
 
+def adicionaAnimacaoTiro(gameObj, posicao, tempo):
+    # segundos = (pygame.time.get_ticks() - tempo) // 1000
+    # atirou = True
+    # if atirou and segundos < 3:
+        # print(segundos)
+    gameObj[7] += 0.2
+    if gameObj[7] > 6 :
+        gameObj[7] = 0
+    tela.blit(gameObj[6][math.ceil(gameObj[7])],posicao)
+        # atirou = False
+        # segundos = 0
+
+def desenhaBarraVida(vida,vida_max,vivo):
+    if(vivo):
+        pygame.draw.rect(tela,(255,0,0),(20,20,vida,20))
+        pygame.draw.rect(tela,(255,255,255),(20,20,vida_max,20),1)
+
 def jogo():
     jogando = True
     pontos = 0
     
-    AdicionaNave(tamanho_tela[0]/2,tamanho_tela[1]/2,50,25,(255,255,255),[],1)
+    AdicionaNave(tamanho_tela[0]/2,tamanho_tela[1]/2,50,25,(255,255,255),[],1,200,500)
     nave = naves[0]
     pygame.mouse.set_visible(0)
     while jogando:
@@ -106,11 +123,12 @@ def jogo():
         draw_cenario(cenarios[6],0)
         draw_cenario(cenarios[7],0)
         draw_cenario(cenarios[12],0)
-        draw_cenario(cenarios[13],(1*velocidade))
+        draw_cenario(cenarios[13],(2*velocidade))
 
         RemoveElementosTamanhoTela(inimigos,tamanho_tela)
         MovimentoNave(nave,tamanho_tela)
-
+        desenhaBarraVida(nave[7],nave[8],nave[9])
+        
         TiroNave(nave,tempo)
         RemoveTiros(nave[5],tamanho_tela)
 
@@ -129,6 +147,7 @@ def jogo():
         # MovimentoInimigo(inimigos)
 
         for nav in naves:
+            print(nav[7])
             pygame.draw.rect(tela,nav[4],(nav[0],nav[1],nav[2],nav[3]))
 
         #colisão de inimigos com a nave
@@ -141,7 +160,7 @@ def jogo():
         for inimigo in inimigos:
             MovimentoInimigo(inimigo,velocidade)
             inimigo[6] += 0.1
-            tela.blit(inimigo[5][math.ceil(inimigo[6])],(inimigo[0],inimigo[1]))
+            tela.blit(inimigo[5][math.ceil(inimigo[6])],(inimigo[0]+inimigo[2]/2,inimigo[1]+inimigo[3]/2))
             if inimigo[6] > 3:
                 inimigo[6] = 0
                 
@@ -155,16 +174,18 @@ def jogo():
         #desenhando tiros de inimigos na tela
         for inimigo in inimigos:
             RemoveTiros(inimigo[10],tamanho_tela)
-            RemoveElementosColisao(nave[5],inimigo,True,True)
-            RemoveElementosColisao(inimigo[10],nave,True,True)
+            ColisaoBalasNaveInimigo(nave[5],inimigo)
+            ColisaoBalasInimigoNave(inimigo[10],nave)
+            # RemoveElementosColisao(inimigo[10],nave,True,True)
             for tiro in inimigo[10]:
-                tiro[0] += (tiro[5][0] * 10)
-                tiro[1] += (tiro[5][1] * 10)
-                tela.blit(tiro[6][math.ceil(tiro[7])],(inimigo[0]-inimigo[2]+20,inimigo[1]+(inimigo[3]/2)+7))
+                tiro[0] += (tiro[5][0] * 7)
+                tiro[1] += (tiro[5][1] * 7)
                 tiro[7] += 0.3
                 if tiro[7] > 6:
                     tiro[7] = 0
+                adicionaAnimacaoTiro(tiro,(inimigo[0]-(inimigo[2]//2),inimigo[1]+(inimigo[3]//2)+5),tempo)
                 pygame.draw.rect(tela,tiro[4],(tiro[0],tiro[1],tiro[2],tiro[3]))
+                atirou = False
 
         #desenhando tiros de chefes na tela
         for chefe in chefes:
