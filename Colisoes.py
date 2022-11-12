@@ -4,8 +4,10 @@ from Particulas import *
 def RemoveElementosTamanhoTela(lista,tamanho_tela):
     for el in lista:
         if el[0] >= tamanho_tela[0] or el[0] <= 0:
+            print('removido')
             lista.remove(el)
         elif el[1] >= tamanho_tela[1] or el[1] <= 0:
+            print('removido')
             lista.remove(el)
 
 def RemoveElementosColisao(lista,elemento,removerA,removerB):
