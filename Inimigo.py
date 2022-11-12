@@ -30,7 +30,7 @@ def SpawnInimigo(tamanho_tela,sprites,velocidade):
 
 def MovimentoInimigo(inimigo,vel):
     global THETA
-    if inimigo[12]:
+    if inimigo[13]:
         seno = math.sin(inimigo[11])
 
         inimigo[0] += inimigo[7][0] * inimigo[4] 
@@ -49,7 +49,7 @@ def seno(angulo):
 def FogoInimigo(inimigos,sprite):
     for n in range(len(inimigos)): 
         inimigo = inimigos[n]
-        if inimigo[12]:
+        if inimigo[13]:
             cooldown_maximo_inimigo = inimigo[8]
             
             if inimigo[9] > cooldown_maximo_inimigo:

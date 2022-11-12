@@ -102,6 +102,7 @@ def jogo():
     
     AdicionaNave(tamanho_tela[0]/2,tamanho_tela[1]/2,50,25,(255,255,255),[],1,200,500)
     nave = naves[0]
+
     pygame.mouse.set_visible(0)
     while jogando:
         for event in pygame.event.get():
@@ -126,11 +127,19 @@ def jogo():
         draw_cenario(cenarios[13],(2*velocidade))
 
         RemoveElementosTamanhoTela(inimigos,tamanho_tela)
+        RemoveElementosTamanhoTela(nave[5],tamanho_tela)
+
+        RemoveElementosColisao(inimigos,nave,'inimigos','nave')
+        RemoveElementosColisao(chefes,nave,'chefes','nave')
+
+        buffColisao(buffs,nave)
+
         MovimentoNave(nave,tamanho_tela)
+        verificaVida(naves,nave)
+
         desenhaBarraVida(nave[7],nave[8],nave[9])
         
         TiroNave(nave,tempo)
-        RemoveTiros(nave[5],tamanho_tela)
 
         SpawnInimigo(tamanho_tela,sprites_squid,velocidade+2)
         SpawnChefe(tamanho_tela,velocidade+2)
@@ -146,37 +155,31 @@ def jogo():
         setTheta_BOSS()
         # MovimentoInimigo(inimigos)
 
-        for nav in naves:
-            print(nav[7])
-            pygame.draw.rect(tela,nav[4],(nav[0],nav[1],nav[2],nav[3]))
-
-        #colisão de inimigos com a nave
-        RemoveElementosColisao(inimigos,nave,True,False)
+        
+        pygame.draw.rect(tela,nave[4],(nave[0],nave[1],nave[2],nave[3]))  
+        for tiro in nave[5]:
+            # print(tiro)
+            tiro[0] += (tiro[5][0] * 10)
+            tiro[1] += (tiro[5][1] * 10)
+            pygame.draw.rect(tela,tiro[4],(tiro[0],tiro[1],tiro[2],tiro[3]))
+        
        
         #colisão de nave com buffs
-        buffColisao(buffs,nave)
+       
 
         #desenhando inimigos na tela
         for inimigo in inimigos:
             MovimentoInimigo(inimigo,velocidade)
             inimigo[6] += 0.1
-            tela.blit(inimigo[5][math.ceil(inimigo[6])],(inimigo[0]+inimigo[2]/2,inimigo[1]+inimigo[3]/2))
+            tela.blit(inimigo[5][math.ceil(inimigo[6])],(inimigo[0],inimigo[1]-20))
+            RemoveElementosTamanhoTela(inimigo[10],tamanho_tela)
+            RemoveElementosColisao(inimigo[10],nave,'fire_inimigo','nave')
+            RemoveElementosColisao(nave[5],inimigo,'fire_nave','inimigo')
+            if inimigo[12] <= 0:
+                inimigo[13] = False
+                inimigos.remove(inimigo)
             if inimigo[6] > 3:
                 inimigo[6] = 0
-                
-            # pygame.draw.rect(tela,inimigo[5],(inimigo[0],inimigo[1],inimigo[2],inimigo[3]))
-
-        #desenhando chefes na tela
-        for chefe in chefes:
-            MovimentoBoss(chefe, tamanho_tela,velocidade)
-            pygame.draw.rect(tela,chefe[5],(chefe[0],chefe[1],chefe[2],chefe[3]))
-
-        #desenhando tiros de inimigos na tela
-        for inimigo in inimigos:
-            RemoveTiros(inimigo[10],tamanho_tela)
-            ColisaoBalasNaveInimigo(nave[5],inimigo)
-            ColisaoBalasInimigoNave(inimigo[10],nave)
-            # RemoveElementosColisao(inimigo[10],nave,True,True)
             for tiro in inimigo[10]:
                 tiro[0] += (tiro[5][0] * 7)
                 tiro[1] += (tiro[5][1] * 7)
@@ -185,36 +188,27 @@ def jogo():
                     tiro[7] = 0
                 adicionaAnimacaoTiro(tiro,(inimigo[0]-(inimigo[2]//2),inimigo[1]+(inimigo[3]//2)+5),tempo)
                 pygame.draw.rect(tela,tiro[4],(tiro[0],tiro[1],tiro[2],tiro[3]))
-                atirou = False
-
-        #desenhando tiros de chefes na tela
+                
+        #desenhando chefes na tela
         for chefe in chefes:
-            RemoveTiros(chefe[9],tamanho_tela)
-            RemoveElementosColisao(nave[5],chefe,True,True)
-            RemoveElementosColisao(chefe[9],nave,True,True)
+            MovimentoBoss(chefe, tamanho_tela,velocidade)
+            RemoveElementosColisao(nave[5],chefe,'fire_nave','chefe')
+            RemoveElementosColisao(chefe[9],nave,'fire_chefe','nave')
+            RemoveElementosTamanhoTela(chefe[9],tamanho_tela)
+            pygame.draw.rect(tela,chefe[5],(chefe[0],chefe[1],chefe[2],chefe[3]))
+            if chefe[13] <= 0:
+                chefe[14] = False
+                chefes.remove(chefe)
             for tiro in chefe[9]:
                 tiro[0] += (tiro[5][0] * 10)
                 tiro[1] += (tiro[5][1] * 10)
-                # tela.blit(tiro[6][math.ceil(tiro[7])],(chefe[0]-chefe[2],chefe[1]+(chefe[3]/2)))
-                # tiro[7] += 0.1
-                # if tiro[7] > 3:
-                #     tiro[7] = 0
-                pygame.draw.rect(tela,tiro[4],(tiro[0],tiro[1],tiro[2],tiro[3]))
-        
-        #desenahndo tiros da nave na tela
-        for tiro in nave[5]:
-            # print(tiro)
-            tiro[0] += (tiro[5][0] * 10)
-            tiro[1] += (tiro[5][1] * 10)
-            pygame.draw.rect(tela,tiro[4],(tiro[0],tiro[1],tiro[2],tiro[3]))
-               
+                pygame.draw.rect(tela,tiro[4],(tiro[0],tiro[1],tiro[2],tiro[3])) 
+   
         for buff in buffs:
             MovimentoBuff(buff)
             pygame.draw.rect(tela,buff[5],(buff[0],buff[1],buff[2],buff[3]))
 
         pygame.display.update()
         
-        RemoveElementosTamanhoTela(naves,tamanho_tela)
         relogio.tick(fps)
-
 jogo()
