@@ -11,11 +11,11 @@ startTime = pygame.time.get_ticks()
 
 THETA_BOSS = 0
 
-def AdicionaBoss(xpos,ypos,largura,altura,velocidade,cor,direcao,cooldown_max,cooldown_start,tiros,qtd_poder,metade,fogo,vida,vivo):
+def AdicionaBoss(xpos,ypos,largura,altura,velocidade,sprite,direcao,cooldown_max,cooldown_start,tiros,qtd_poder,metade,fogo,vida,vivo,sprite_index):
     global chefes
-    chefes.append([xpos,ypos,largura,altura,velocidade,cor,direcao,cooldown_max,cooldown_start,tiros,qtd_poder,metade,fogo,vida,vivo])
+    chefes.append([xpos,ypos,largura,altura,velocidade,sprite,direcao,cooldown_max,cooldown_start,tiros,qtd_poder,metade,fogo,vida,vivo,sprite_index])
 
-def SpawnChefe(tamanho_tela,velocidade):
+def SpawnChefe(tamanho_tela,sprite,velocidade):
 
     tempo_atual = pygame.time.get_ticks()
     global startTime
@@ -26,7 +26,7 @@ def SpawnChefe(tamanho_tela,velocidade):
     ypos = (tamanho_tela[1]//2)-100
     
     if segundos > 30:
-        AdicionaBoss(xpos,ypos,100,100,velocidade,(255,255,255),[-1,0],1,0,[],10,False,False,50,True)
+        AdicionaBoss(xpos,ypos,100,100,velocidade,sprite,[-1,0],1,0,[],15,False,False,400,True,0)
         startTime = pygame.time.get_ticks()
 
 
@@ -70,7 +70,7 @@ def FogoBoss(chefes,sprite):
 
         cooldown_maximo_chefe = chefe[7]
         if chefe[14]:
-            if chefe[8] > cooldown_maximo_chefe and segundos > 5:
+            if chefe[8] > cooldown_maximo_chefe:
                 anguloStep = 360//(chefe[10]+1)
                 anguloAtual = 45 - anguloStep
                 if chefe[12]:
