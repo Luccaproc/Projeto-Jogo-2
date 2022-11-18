@@ -32,6 +32,7 @@ def RemoveElementosColisao(lista,elemento,tipo_lista,tipo_elemento):
     for el in lista_nova:
         if mostrar_colisor:
             pygame.draw.rect(pygame.display.get_surface(),(30,255,30),(el[0],el[1],el[2],el[3]),1)
+            pygame.draw.rect(pygame.display.get_surface(),(30,255,30),(elemento[0],elemento[1],elemento[2],elemento[3]),1)
         if colisaoRetangulo(el,elemento):
             AdicionaParticulas(el[0],el[1])
             lista_nova.remove(el)       

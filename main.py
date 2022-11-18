@@ -30,8 +30,8 @@ squid = pygame.image.load(os.path.join("assets","imagens","squid.png")).convert_
 tiro = pygame.image.load(os.path.join("assets","imagens","Tiro.png")).convert_alpha()
 buff_tiro = pygame.image.load(os.path.join("assets","imagens","buff_tiro.png")).convert_alpha()
 
-nave_cima = pygame.image.load(os.path.join("assets","imagens","nave_cima.png")).convert_alpha()
-nave_baixo = pygame.image.load(os.path.join("assets","imagens","nave_baixo.png")).convert_alpha()
+nave_img = pygame.image.load(os.path.join("assets","imagens","nave_sprite.png")).convert_alpha()
+
 
 caminho_fonte = os.path.join("assets","fonts","04B_30__.TTF")
 
@@ -63,8 +63,8 @@ criarSprite(tiro,tiro_sprite,7,3,3,32,32)
 criarSprite(aguaviva,boss_sprite,10,4,4,100,100)
 criarSprite(buff_tiro,buff_sprite,12,4,4,32,32)
 
-criarSprite(nave_cima,nave_sprite,3,3,1,128,128)
-criarSprite(nave_baixo,nave_sprite,3,3,1,128,128)
+criarSprite(nave_img,nave_sprite,5,5,5,128,64)
+
 
 qtd_cenarios = 14
 
@@ -109,8 +109,10 @@ def adicionaAnimacaoTiro(gameObj, posicao, tempo):
 
 def desenhaBarraVida(vida,vida_max,vivo):
     if(vivo):
-        pygame.draw.rect(tela,(255,0,0),(20,20,vida,10))
-        pygame.draw.rect(tela,(255,255,255),(20,20,vida_max,10),1)
+        tamanho_barra = 400
+        vida_rating = tamanho_barra/vida_max
+        pygame.draw.rect(tela,(255,0,0),(20,20,vida*vida_rating,10))
+        pygame.draw.rect(tela,(255,255,255),(20,20,tamanho_barra,10),1)
 
 def desenhaGameOver(nave):
     if not nave[9]:
@@ -186,21 +188,28 @@ def gameOver():
         clock.tick(30)
 
 def restart():
-    res = True
-
-    while res:
-        chefes.clear()
-        naves.clear()
-        inimigos.clear()
-        buffs.clear()
-        res = False
-    # jogo()
+    global chefes
+    global inimigos
+    global buffs
+    global naves
+    
+    chefes.clear()
+    naves.clear()
+    inimigos.clear()
+    buffs.clear()
+    
+    AdicionaNave(tamanho_tela[0]/2,tamanho_tela[1]/2,100,64,nave_sprite,[],1,100,500,0)
+    global nave
+    nave = naves[0]   
+    global pontos
+    pontos = 0
 
 def jogo():
     jogando = True
     pontos = 0
     # print(pygame.font.get_fonts())
-    AdicionaNave(tamanho_tela[0]/2,tamanho_tela[1]/2,50,25,nave_sprite,[],1,200,500,0)
+    AdicionaNave(tamanho_tela[0]/2,tamanho_tela[1]/2,100,64,nave_sprite,[],1,100,500,0)
+    global nave
     nave = naves[0]
     print(len(nave_sprite))
     pygame.mouse.set_visible(0)
@@ -209,13 +218,11 @@ def jogo():
             if event.type == pygame.QUIT:
                 jogando = False
                 pygame.quit()
-        # nave[10] += 0.2
-        # if nave[10] > 3:
-        #     nave[10] = 3
+        
         key_event = pygame.key.get_pressed()
 
         if key_event[pygame.K_INSERT]:
-            jogando = False
+            # jogando = False
             restart()
             # break
 
@@ -265,6 +272,7 @@ def jogo():
         setTheta()
         setTheta_BOSS()
 
+        estabilizaNave(nave)
         #desenhando nave
         # pygame.draw.rect(tela,nave[4],(nave[0],nave[1],nave[2],nave[3]))  
         tela.blit(nave[4][math.ceil(nave[10])],(nave[0],nave[1]))
@@ -331,4 +339,6 @@ def jogo():
         pygame.display.update()
         
         relogio.tick(fps)
+pontos = 0
+nave = []  
 jogo()

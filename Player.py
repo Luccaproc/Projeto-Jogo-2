@@ -17,7 +17,7 @@ def AdicionaNave(xpos,ypos,largura,altura,sprite,tiros,power,vida_atual,vida_max
 def MovimentoNave(nave, tamanho_tela):
     if nave[9]:
         velocidade = 5
-        
+        # nave[10] = 2
         keys = pygame.key.get_pressed() 
         if keys[pygame.K_LEFT]: # We can check if a key is pressed like this
             if(nave[0] >= 0 + nave[2]):
@@ -32,22 +32,31 @@ def MovimentoNave(nave, tamanho_tela):
         if keys[pygame.K_UP]:
             if nave[1] >= 0 + nave[3]:
                 nave[1] = nave[1] - velocidade
-                nave[10] += 0.2
-                if nave[10] > 2:
+                nave[10] -= 0.2
+                if nave[10] <= 0:
                     nave[10] = 0
             else:
                 nave[1] = nave[1]
         if keys[pygame.K_DOWN]:
             if nave[1] <= tamanho_tela[1] - nave[3]:
                 nave[1] = nave[1] + velocidade
+                nave[10] += 0.2
+                if nave[10] > 3:
+                    nave[10] = 4
             else:
                 nave[1] = tamanho_tela[1] - nave[3]
+                
+def estabilizaNave(nave) :
+    if nave[10] > 2:
+        nave[10] -= 0.1
+    if nave[10] < 2:
+        nave[10] += 0.1
 
 def TiroNave(nave,tempo):
     if nave[9]:
         keys = pygame.key.get_pressed() 
         if keys[pygame.K_SPACE]:
-            AdicionaTiroNave(nave[0],nave[1] + (nave[3]/2),5,5,(255,255,255),[1,0],5,nave[5],nave[6])
+            AdicionaTiroNave(nave[0]+100,nave[1] + (nave[3]/2),5,5,(255,255,255),[1,0],5,nave[5],nave[6])
 
 def drawParticlesPlayer(nave,vel):
     if nave[9]:
