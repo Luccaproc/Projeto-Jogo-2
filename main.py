@@ -46,6 +46,9 @@ boss_sprite = []
 buff_sprite = []
 nave_sprite = []
 
+pontos = 0
+nave = [] 
+
 
 def criarSprite(img,lista,qtd,linhas,colunas,largura,altura):
 
@@ -138,77 +141,49 @@ def desenhaScore(score, tela):
     scoreStr = font.render(str(score), True, (255, 255, 255))
     tela.blit(scoreStr,(tamanho_tela[0]/2,tamanho_tela[1] -30))
 
-def gameOver():
-    pygame.mouse.set_visible(1)
-    screen = pygame.display.set_mode(tamanho_tela)
-    font = pygame.font.Font(None, 32)
-    clock = pygame.time.Clock()
-    input_box = pygame.Rect(100, 100, 140, 32)
-    color_inactive = pygame.Color('lightskyblue3')
-    color_active = pygame.Color('dodgerblue2')
-    color = color_inactive
-    active = False
-    text = ''
-    done = False
-
-    while not done:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                done = True
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                # If the user clicked on the input_box rect.
-                if input_box.collidepoint(event.pos):
-                    # Toggle the active variable.
-                    active = not active
-                else:
-                    active = False
-                # Change the current color of the input box.
-                color = color_active if active else color_inactive
-            if event.type == pygame.KEYDOWN:
-                if active:
-                    if event.key == pygame.K_RETURN:
-                        text = ''
-                    elif event.key == pygame.K_BACKSPACE:
-                        text = text[:-1]
-                    else:
-                        text += event.unicode
-
-        screen.fill((30, 30, 30))
-        # Render the current text.
-        txt_surface = font.render(text, True, color)
-        # Resize the box if the text is too long.
-        width = max(200, txt_surface.get_width()+10)
-        input_box.w = width
-        # Blit the text.
-        screen.blit(txt_surface, (input_box.x+5, input_box.y+5))
-        # Blit the input_box rect.
-        pygame.draw.rect(screen, color, input_box, 2)
-
-        pygame.display.flip()
-        clock.tick(30)
-
 def restart():
     global chefes
     global inimigos
     global buffs
     global naves
-    
+    global nave
+    global pontos
+    global alpha_over
+    global tempo
+    global cenarios
+
     chefes.clear()
     naves.clear()
     inimigos.clear()
     buffs.clear()
-    
-    AdicionaNave(tamanho_tela[0]/2,tamanho_tela[1]/2,100,64,nave_sprite,[],1,100,500,0)
-    global nave
+    cenarios.clear()
+
+    AdicionaNave((tamanho_tela[0]/2 )- 100,(tamanho_tela[1]/2)-50,100,64,nave_sprite,[],1,500,500,0)
     nave = naves[0]   
-    global pontos
     pontos = 0
+    alpha_over = 0
+    tempo = pygame.time.get_ticks()
+
+    qtd_cenarios = 14
+
+    for index in range(qtd_cenarios):
+        col = index%4
+        linha = index//4
+        
+        corte = (col*1024,linha*512,1024,512)
+        img = backgroundImg2.subsurface(corte).convert_alpha()
+        objImg = [img,0,0]
+        cenarios.append(objImg)
+
+cenario_width = cenarios[0][0].get_width()
+    
 
 def jogo():
     jogando = True
+    global pontos
     pontos = 0
     # print(pygame.font.get_fonts())
-    AdicionaNave(tamanho_tela[0]/2,tamanho_tela[1]/2,100,64,nave_sprite,[],1,100,500,0)
+    AdicionaNave((tamanho_tela[0]/2 )- 100,(tamanho_tela[1]/2)-50,100,64,nave_sprite,[],1,500,500,0)
     global nave
     nave = naves[0]
     print(len(nave_sprite))
@@ -339,6 +314,5 @@ def jogo():
         pygame.display.update()
         
         relogio.tick(fps)
-pontos = 0
-nave = []  
+ 
 jogo()

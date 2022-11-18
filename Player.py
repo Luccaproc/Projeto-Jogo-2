@@ -47,10 +47,12 @@ def MovimentoNave(nave, tamanho_tela):
                 nave[1] = tamanho_tela[1] - nave[3]
                 
 def estabilizaNave(nave) :
-    if nave[10] > 2:
+    if nave[10] > 2.2:
         nave[10] -= 0.1
-    if nave[10] < 2:
+    elif nave[10] < 1.8:
         nave[10] += 0.1
+    elif nave[10] > 1.8 and nave[10] < 2.2:
+        nave[10] = 2
 
 def TiroNave(nave,tempo):
     if nave[9]:
