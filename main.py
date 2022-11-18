@@ -1,6 +1,6 @@
-import pygame
-import os
+import pygame, sys, os
 
+from pygame.locals import *
 from random import randint
 
 from Player import *
@@ -178,6 +178,23 @@ def restart():
 cenario_width = cenarios[0][0].get_width()
     
 
+def configuracoes():
+    rodando = True
+    while rodando:
+        tela.fill((112, 41, 99))
+ 
+        desenhaTexto("Configuracoes",tela,tamanho_tela[0]/2-170,tamanho_tela[1]/2-100)
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    rodando = False
+        
+        pygame.display.update()
+        relogio.tick(60)
+
 def jogo():
     jogando = True
     global pontos
@@ -314,5 +331,42 @@ def jogo():
         pygame.display.update()
         
         relogio.tick(fps)
+        
+#definindo o menu
+def menuPrincipal():
+    menuLigado = True
+    while menuLigado:
  
-jogo()
+        tela.fill((112, 41, 99))
+        desenhaTexto("Menu Principal", tela,tamanho_tela[0]/2-170,tamanho_tela[1]/2-100)
+        mx, my = pygame.mouse.get_pos()
+ 
+        botao_1 = pygame.Rect(430, 250, 200, 50)
+        botao_2 = pygame.Rect(430, 350, 200, 50)
+        if botao_1.collidepoint((mx, my)):
+            if click:
+                jogo()
+        if botao_2.collidepoint((mx, my)):
+            if click:
+                configuracoes()
+        pygame.draw.rect(tela, (48, 25, 52), botao_1)
+        pygame.draw.rect(tela, (48, 25, 52), botao_2)
+ 
+        click = False
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    pygame.quit()
+                    sys.exit()
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+ 
+        pygame.display.update()
+        relogio.tick(60)
+menuPrincipal()
+pontos = 0
+nave = []
