@@ -19,13 +19,13 @@ def SpawnInimigo(tamanho_tela,sprites,velocidade):
     tempo_atual = pygame.time.get_ticks()
     global startTime
     segundos = (tempo_atual - startTime)
-
+    rand_sprite = randint(0,1)
     xpos = tamanho_tela[0]
     ypos = randint(100,tamanho_tela[1]-100)
     
     if segundos >  1000 * (10/rand):
         vida_adicional = velocidade * 10
-        AdicionaInimigo(xpos,ypos,50,25,velocidade,sprites,0,[-1,0],100,0,[],50+vida_adicional,True)
+        AdicionaInimigo(xpos,ypos,50,25,velocidade,sprites[rand_sprite],0,[-1,0],100,0,[],50+vida_adicional,True)
         startTime = pygame.time.get_ticks()
 
 def MovimentoInimigo(inimigo,vel):

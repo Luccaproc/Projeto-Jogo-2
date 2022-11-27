@@ -28,6 +28,7 @@ insert = pygame.image.load(os.path.join("assets","imagens","insert.png")).conver
 
 aguaviva = pygame.image.load(os.path.join("assets","imagens","aguaviva.png")).convert_alpha()
 squid = pygame.image.load(os.path.join("assets","imagens","squid.png")).convert_alpha()
+manta = pygame.image.load(os.path.join("assets","imagens","manta.png")).convert_alpha()
 tiro = pygame.image.load(os.path.join("assets","imagens","Tiro.png")).convert_alpha()
 buff_tiro = pygame.image.load(os.path.join("assets","imagens","buff_tiro.png")).convert_alpha()
 
@@ -43,6 +44,7 @@ cenarios = []
 
 tiro_sprite = []
 sprites_squid = []
+manta_sprite = []
 boss_sprite = []
 buff_sprite = []
 nave_sprite = []
@@ -53,7 +55,6 @@ nave = []
 
 
 def criarSprite(img,lista,qtd,linhas,colunas,largura,altura):
-
     for i in range(qtd):
         col = i % colunas
         linha = i // linhas
@@ -63,6 +64,7 @@ def criarSprite(img,lista,qtd,linhas,colunas,largura,altura):
 
 criarSprite(insert,insert_sprite,2,2,2,64,64)
 criarSprite(squid,sprites_squid,9,3,3,70,70)
+criarSprite(manta,manta_sprite,10,4,4,70,70)
 criarSprite(tiro,tiro_sprite,7,3,3,32,32)
 criarSprite(aguaviva,boss_sprite,10,4,4,100,100)
 criarSprite(buff_tiro,buff_sprite,12,4,4,32,32)
@@ -166,7 +168,7 @@ def restart():
     buffs.clear()
     cenarios.clear()
 
-    AdicionaNave((tamanho_tela[0]/2 )- 100,(tamanho_tela[1]/2)-50,100,64,nave_sprite,[],1,100,500,0)
+    AdicionaNave((tamanho_tela[0]/2 )- 100,(tamanho_tela[1]/2)-50,100,64,nave_sprite,[],1,500,500,0)
     nave = naves[0]   
     pontos = 0
     alpha_over = 0
@@ -256,8 +258,7 @@ def jogo():
         desenhaBarraVida(nave[7],nave[8],nave[9])
         
         TiroNave(nave,tempo)
-
-        SpawnInimigo(tamanho_tela,sprites_squid,velocidade+2)
+        SpawnInimigo(tamanho_tela,[sprites_squid,manta_sprite],velocidade+2)
         SpawnChefe(tamanho_tela,boss_sprite,velocidade+2)
         SpawnBuff(tamanho_tela,buff_sprite)
 
