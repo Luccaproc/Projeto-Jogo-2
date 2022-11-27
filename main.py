@@ -10,7 +10,6 @@ from Particulas import *
 from Colisoes import *
 from Chefe import *
 from Buff import *
-# from Parallax import *
 
 pygame.init()
 
@@ -24,6 +23,8 @@ tela = pygame.display.set_mode(tamanho_tela)
 pygame.display.set_caption('Synth Invaders')
 relogio = pygame.time.Clock()
 tempo = pygame.time.get_ticks()
+
+insert = pygame.image.load(os.path.join("assets","imagens","insert.png")).convert_alpha()
 
 aguaviva = pygame.image.load(os.path.join("assets","imagens","aguaviva.png")).convert_alpha()
 squid = pygame.image.load(os.path.join("assets","imagens","squid.png")).convert_alpha()
@@ -45,6 +46,7 @@ sprites_squid = []
 boss_sprite = []
 buff_sprite = []
 nave_sprite = []
+insert_sprite = []
 
 pontos = 0
 nave = [] 
@@ -52,15 +54,14 @@ nave = []
 
 def criarSprite(img,lista,qtd,linhas,colunas,largura,altura):
 
-    print('---------------------------------')
     for i in range(qtd):
         col = i % colunas
         linha = i // linhas
-        print(str(linha)+'|'+str(col))
         corte = (col*largura,linha*altura,largura,altura)
         sprite = img.subsurface(corte).convert_alpha()
         lista.append(sprite)
 
+criarSprite(insert,insert_sprite,2,2,2,64,64)
 criarSprite(squid,sprites_squid,9,3,3,70,70)
 criarSprite(tiro,tiro_sprite,7,3,3,32,32)
 criarSprite(aguaviva,boss_sprite,10,4,4,100,100)
@@ -68,6 +69,7 @@ criarSprite(buff_tiro,buff_sprite,12,4,4,32,32)
 
 criarSprite(nave_img,nave_sprite,5,5,5,128,64)
 
+botao = [(tamanho_tela[0]/2),(tamanho_tela[1]/2),insert_sprite,0]
 
 qtd_cenarios = 14
 
@@ -117,7 +119,7 @@ def desenhaBarraVida(vida,vida_max,vivo):
         pygame.draw.rect(tela,(255,0,0),(20,20,vida*vida_rating,10))
         pygame.draw.rect(tela,(255,255,255),(20,20,tamanho_barra,10),1)
 
-def desenhaGameOver(nave):
+def desenhaGameOver(nave,pontos):
     if not nave[9]:
         global alpha_over
         s = pygame.Surface((1024,512))  # the size of your rect
@@ -127,11 +129,17 @@ def desenhaGameOver(nave):
         alpha_over += 1
         if alpha_over > 200:
             alpha_over = 200
-        desenhaTexto("Game over",tela,tamanho_tela[0]/2-135,tamanho_tela[1]/2-100)
+        tela.blit(botao[2][round(botao[3])],(botao[0],botao[1]))
+        botao[3] += 0.05
+        if botao[3] >= 1:
+            botao[3] = 0
+        desenhaTexto("Game over",tela,tamanho_tela[0]/2-135,tamanho_tela[1]/2-100,40)
+        desenhaTexto("Pontos:"+str(pontos),tela,(tamanho_tela[0]/2)-135,(tamanho_tela[1]/2)-50,30)
+        desenhaTexto("Para jogar novamente",tela,(tamanho_tela[0]/2)-135,(tamanho_tela[1]/2)+70,20)
 
-def desenhaTexto(texto, tela,xpos,ypos):
+def desenhaTexto(texto, tela,xpos,ypos,size):
     pygame.font.init()
-    font = pygame.font.Font(caminho_fonte, 40)
+    font = pygame.font.Font(caminho_fonte, size)
     scoreStr = font.render(texto, True, (255, 255, 255))
     tela.blit(scoreStr,(xpos,ypos))
 
@@ -158,7 +166,7 @@ def restart():
     buffs.clear()
     cenarios.clear()
 
-    AdicionaNave((tamanho_tela[0]/2 )- 100,(tamanho_tela[1]/2)-50,100,64,nave_sprite,[],1,500,500,0)
+    AdicionaNave((tamanho_tela[0]/2 )- 100,(tamanho_tela[1]/2)-50,100,64,nave_sprite,[],1,100,500,0)
     nave = naves[0]   
     pontos = 0
     alpha_over = 0
@@ -199,11 +207,9 @@ def jogo():
     jogando = True
     global pontos
     pontos = 0
-    # print(pygame.font.get_fonts())
     AdicionaNave((tamanho_tela[0]/2 )- 100,(tamanho_tela[1]/2)-50,100,64,nave_sprite,[],1,500,500,0)
     global nave
     nave = naves[0]
-    print(len(nave_sprite))
     pygame.mouse.set_visible(0)
     while jogando:
         for event in pygame.event.get():
@@ -326,7 +332,7 @@ def jogo():
                 buff[7] = 0
             # pygame.draw.rect(tela,buff[5],(buff[0],buff[1],buff[2],buff[3]))
 
-        desenhaGameOver(nave)
+        desenhaGameOver(nave,pontos)
 
         pygame.display.update()
         
@@ -338,7 +344,7 @@ def menuPrincipal():
     while menuLigado:
  
         tela.fill((112, 41, 99))
-        desenhaTexto("Menu Principal", tela,tamanho_tela[0]/2-170,tamanho_tela[1]/2-100)
+        desenhaTexto("Menu Principal", tela,tamanho_tela[0]/2-170,tamanho_tela[1]/2-100,40)
         mx, my = pygame.mouse.get_pos()
  
         botao_1 = pygame.Rect(430, 250, 200, 50)

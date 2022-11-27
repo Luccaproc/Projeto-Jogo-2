@@ -29,13 +29,12 @@ def SpawnBuff(tamanho_tela,sprite):
 
 
 def buffColisao(lista,elemento):
-    for i in range(len(lista)):
-        el_lista = lista[i]
-        d = ( (el_lista[0] - elemento[0])**2 + (el_lista[1] - elemento[1])**2 )**0.5
-        if d <= el_lista[2]/2 + elemento[2]/2:
+    for el in lista:
+        d = ( (el[0] - elemento[0])**2 + (el[1] - elemento[1])**2 )**0.5
+        if d <= el[2]/2 + elemento[2]/2:
             if elemento[6] > 5:
                 elemento[6] += 0
             else :
                 elemento[6] += 1
-            lista.remove(el_lista)
+            lista.remove(el)
             
