@@ -1,8 +1,17 @@
-
+import pygame,sys
+from pygame.locals import *
+import os
 import math
+
+pygame.init()
+som = os.path.join("assets","som","pew.wav")
 
 cooldown_tiro = 0
 cooldown_tiro_inimigo = 0
+
+
+tiro_som = pygame.mixer.Sound(som)
+tiro_som.set_volume(0.2)
 
 def AdicionaTiroNave(xpos,ypos,largura,altura,cor,direcao,cooldown,tiros_list,qtd_poder):
     global cooldown_tiro
@@ -14,6 +23,7 @@ def AdicionaTiroNave(xpos,ypos,largura,altura,cor,direcao,cooldown,tiros_list,qt
 
     cooldown_maximo = cooldown
     if cooldown_tiro > cooldown_maximo:
+        tiro_som.play()
         for bullet in range(qtd_poder):
 
             #transformando graus em radianos

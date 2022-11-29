@@ -2,6 +2,8 @@ from random import randint
 import pygame
 from Tiro import *
 
+pygame.init()
+explosion = pygame.mixer.Sound("assets\som\Explosion_death.wav")
 naves = []
 particulas_nave = []
 
@@ -77,6 +79,7 @@ def drawParticlesPlayer(nave,vel):
 def verificaVida(lista,nave):
     for nave in lista:
         if nave[7] <= 0:
+            explosion.play(0)
             nave[9] = False
             nave[0] = -100
             nave[1] = -100

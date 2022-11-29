@@ -1,4 +1,8 @@
 from Particulas import *
+import pygame
+
+pygame.init()
+damage_taken = pygame.mixer.Sound("assets\som\damage_taken.wav")
 
 mostrar_colisor = False
 
@@ -37,12 +41,16 @@ def RemoveElementosColisao(lista,elemento,tipo_lista,tipo_elemento):
             AdicionaParticulas(el[0],el[1])
             lista_nova.remove(el)       
             if tipo_elemento == 'nave' and tipo_lista == 'fire_inimigo':
+                damage_taken.play(0)
                 elemento[7] -= 10
             if tipo_elemento == 'nave' and tipo_lista == 'inimigos':
+                damage_taken.play(0)
                 elemento[7] -= 50
             if tipo_elemento == 'nave' and tipo_lista == 'fire_chefe':
+                damage_taken.play(0)
                 elemento[7] -= 10
             if tipo_elemento == 'nave' and tipo_lista == 'chefes':
+                damage_taken.play(0)
                 elemento[7] -= 100
             if tipo_elemento == 'inimigo' and tipo_lista == 'fire_nave':
                 elemento[12] -= 10

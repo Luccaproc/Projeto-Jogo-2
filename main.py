@@ -24,21 +24,27 @@ pygame.display.set_caption('Synth Invaders')
 relogio = pygame.time.Clock()
 tempo = pygame.time.get_ticks()
 
+#sprites
 insert = pygame.image.load(os.path.join("assets","imagens","insert.png")).convert_alpha()
-
 aguaviva = pygame.image.load(os.path.join("assets","imagens","aguaviva.png")).convert_alpha()
 squid = pygame.image.load(os.path.join("assets","imagens","squid.png")).convert_alpha()
 manta = pygame.image.load(os.path.join("assets","imagens","manta.png")).convert_alpha()
 tiro = pygame.image.load(os.path.join("assets","imagens","Tiro.png")).convert_alpha()
 buff_tiro = pygame.image.load(os.path.join("assets","imagens","buff_tiro.png")).convert_alpha()
-
 nave_img = pygame.image.load(os.path.join("assets","imagens","nave_sprite.png")).convert_alpha()
 
-
+#fonte
 caminho_fonte = os.path.join("assets","fonts","04B_30__.TTF")
 
+#cenario
 backgroundImg = pygame.image.load(os.path.join("assets","imagens","cenario.png")).convert_alpha()
 backgroundImg2 = pygame.transform.scale(backgroundImg,(4096,2048))
+
+#som
+musica_jogo = pygame.mixer.Sound("assets\som\music_game.wav")
+musica_menu = pygame.mixer.Sound("assets\som\musica_menu_oficial.wav")
+
+damage_taken = pygame.mixer.Sound("assets\som\damage_taken.wav")
 
 cenarios = []
 
@@ -50,9 +56,9 @@ buff_sprite = []
 nave_sprite = []
 insert_sprite = []
 
-pontos = 0
-nave = [] 
+nave = []
 
+pontos = 0
 
 def criarSprite(img,lista,qtd,linhas,colunas,largura,altura):
     for i in range(qtd):
@@ -110,7 +116,7 @@ def adicionaAnimacaoTiro(gameObj, posicao, tempo):
     # atirou = True
     # if atirou and segundos < 3:
     gameObj[7] += 0.2
-    if gameObj[7] > 6 :
+    if gameObj[7] > 6:
         gameObj[7] = 0
     tela.blit(gameObj[6][math.ceil(gameObj[7])],posicao)
 
@@ -123,6 +129,7 @@ def desenhaBarraVida(vida,vida_max,vivo):
 
 def desenhaGameOver(nave,pontos):
     if not nave[9]:
+        musica_jogo.fadeout(1)
         global alpha_over
         s = pygame.Surface((1024,512))  # the size of your rect
         s.set_alpha(alpha_over)                # alpha level
@@ -175,7 +182,7 @@ def restart():
     tempo = pygame.time.get_ticks()
 
     qtd_cenarios = 14
-
+    musica_jogo.play(-1,0,1000)
     for index in range(qtd_cenarios):
         col = index%4
         linha = index//4
@@ -206,6 +213,8 @@ def configuracoes():
         relogio.tick(60)
 
 def jogo():
+    musica_menu.fadeout(1)
+    musica_jogo.play(-1,0,1000)
     jogando = True
     global pontos
     pontos = 0
@@ -341,6 +350,7 @@ def jogo():
         
 #definindo o menu
 def menuPrincipal():
+    musica_menu.play(-1,0,500)
     menuLigado = True
     while menuLigado:
  
