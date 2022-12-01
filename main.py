@@ -197,14 +197,48 @@ def restart():
         cenarios.append(objImg)
 
 cenario_width = cenarios[0][0].get_width()
-    
 
-def configuracoes():
+def menuPausa():
+    #Audios
+    audio = os.path.join("assets","som","click_menu.wav")
+    audioClick = pygame.mixer.Sound(audio)
+    audioClick.set_volume(0.2)
+
+    menuRodando = True
+    while menuRodando:
+
+        pygame.mouse.set_visible(1)
+
+        Fundo = pygame.image.load('assets/imagens/Fundo_Transparente.png')
+        tela.blit(Fundo, (0,0))
+
+        mx, my = pygame.mouse.get_pos()
+
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    menuRodando = False
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
+            
+ 
+        pygame.display.update()
+        relogio.tick(60)
+
+        pygame.display.update()
+        relogio.tick(60)
+
+def controles():
     rodando = True
     while rodando:
         tela.fill((112, 41, 99))
  
-        desenhaTexto("Configuracoes",tela,tamanho_tela[0]/2-170,tamanho_tela[1]/2-100)
+        Fundo_Controles = pygame.image.load('assets/imagens/Tutorial_Menu.png')
+        tela.blit(Fundo_Controles, (0,0)) 
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -232,6 +266,9 @@ def jogo():
             if event.type == pygame.QUIT:
                 jogando = False
                 pygame.quit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    menuPausa()
         
         key_event = pygame.key.get_pressed()
 
@@ -355,25 +392,37 @@ def jogo():
         
 #definindo o menu
 def menuPrincipal():
-    musica_menu.play(-1,0,500)
+    #Audios
+    audio = os.path.join("assets","som","click_menu.wav")
+    audioClick = pygame.mixer.Sound(audio)
+    audioClick.set_volume(0.2)
+    musica_menu.play(-1,0,1000)
+
     menuLigado = True
+    #Loop principal
     while menuLigado:
+        fundoTela = pygame.image.load('assets/imagens/Background_menu.png')
+        tela.blit(fundoTela, (0,0))
  
-        tela.fill((112, 41, 99))
-        desenhaTexto("Menu Principal", tela,tamanho_tela[0]/2-170,tamanho_tela[1]/2-100,40)
         mx, my = pygame.mouse.get_pos()
+
+        botãoJogo = pygame.image.load('assets/imagens/Botão_Jogar_Menu2.PNG')
+        botãoConfiguracoes = pygame.image.load('assets/imagens/Botão_controles_Menu2.PNG')
+
+        tela.blit(botãoJogo, (70, 200))
+        tela.blit(botãoConfiguracoes, (70, 330))
  
-        botao_1 = pygame.Rect(430, 250, 200, 50)
-        botao_2 = pygame.Rect(430, 350, 200, 50)
-        if botao_1.collidepoint((mx, my)):
+        botão_1 = botãoJogo.get_rect(topleft=(70, 200))
+        botão_2 = botãoConfiguracoes.get_rect(topleft=(70, 330))
+        if botão_1.collidepoint((mx, my)):
             if click:
+                audioClick.play()
                 jogo()
-        if botao_2.collidepoint((mx, my)):
+        if botão_2.collidepoint((mx, my)):
             if click:
-                configuracoes()
-        pygame.draw.rect(tela, (48, 25, 52), botao_1)
-        pygame.draw.rect(tela, (48, 25, 52), botao_2)
- 
+                audioClick.play()
+                controles()
+        
         click = False
         for event in pygame.event.get():
             if event.type == QUIT:
