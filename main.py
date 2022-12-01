@@ -31,6 +31,7 @@ squid = pygame.image.load(os.path.join("assets","imagens","squid.png")).convert_
 manta = pygame.image.load(os.path.join("assets","imagens","manta.png")).convert_alpha()
 tiro = pygame.image.load(os.path.join("assets","imagens","Tiro.png")).convert_alpha()
 buff_tiro = pygame.image.load(os.path.join("assets","imagens","buff_tiro.png")).convert_alpha()
+buff_vida = pygame.image.load(os.path.join("assets","imagens","buff_vida.png")).convert_alpha()
 nave_img = pygame.image.load(os.path.join("assets","imagens","nave_sprite.png")).convert_alpha()
 
 #fonte
@@ -53,6 +54,7 @@ sprites_squid = []
 manta_sprite = []
 boss_sprite = []
 buff_sprite = []
+buff_vida_sprite = []
 nave_sprite = []
 insert_sprite = []
 
@@ -74,6 +76,7 @@ criarSprite(manta,manta_sprite,10,4,4,70,70)
 criarSprite(tiro,tiro_sprite,7,3,3,32,32)
 criarSprite(aguaviva,boss_sprite,10,4,4,100,100)
 criarSprite(buff_tiro,buff_sprite,12,4,4,32,32)
+criarSprite(buff_vida,buff_vida_sprite,12,4,4,32,32)
 
 criarSprite(nave_img,nave_sprite,5,5,5,128,64)
 
@@ -129,7 +132,7 @@ def desenhaBarraVida(vida,vida_max,vivo):
 
 def desenhaGameOver(nave,pontos):
     if not nave[9]:
-        musica_jogo.fadeout(1)
+        musica_jogo.stop()
         global alpha_over
         s = pygame.Surface((1024,512))  # the size of your rect
         s.set_alpha(alpha_over)                # alpha level
@@ -182,7 +185,8 @@ def restart():
     tempo = pygame.time.get_ticks()
 
     qtd_cenarios = 14
-    musica_jogo.play(-1,0,1000)
+    musica_jogo.stop()
+    musica_jogo.play(-1,0,2000)
     for index in range(qtd_cenarios):
         col = index%4
         linha = index//4
@@ -213,8 +217,9 @@ def configuracoes():
         relogio.tick(60)
 
 def jogo():
-    musica_menu.fadeout(1)
-    musica_jogo.play(-1,0,1000)
+    musica_menu.stop()
+    musica_jogo.stop()
+    musica_jogo.play(-1,0,2000)
     jogando = True
     global pontos
     pontos = 0
@@ -269,7 +274,7 @@ def jogo():
         TiroNave(nave,tempo)
         SpawnInimigo(tamanho_tela,[sprites_squid,manta_sprite],velocidade+2)
         SpawnChefe(tamanho_tela,boss_sprite,velocidade+2)
-        SpawnBuff(tamanho_tela,buff_sprite)
+        SpawnBuff(tamanho_tela,[buff_sprite,buff_vida_sprite])
 
         FogoBoss(chefes,tiro_sprite)
         FogoInimigo(inimigos,tiro_sprite)
